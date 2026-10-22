@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Build output and local configuration
+build/
+coverage/
+.env*
+!.env.example
+Thumbs.db
+*.tmp
