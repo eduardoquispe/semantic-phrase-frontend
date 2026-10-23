@@ -1,20 +1,10 @@
+import { PhraseMatchType } from "../../interfaces/phrase-match-type.enum";
 import { FeedbackMessage } from "../../../../shared/components/ui/feedback-message";
 import type { PhraseValidationFeedbackProps } from "./phrase-validation-feedback.types";
 
 export function PhraseValidationFeedback({
   response,
-  isError,
 }: PhraseValidationFeedbackProps) {
-  if (isError) {
-    return (
-      <FeedbackMessage
-        variant="error"
-        title="No pudimos validar la frase"
-        description="Tu texto sigue aquí. Intenta validarlo de nuevo."
-      />
-    );
-  }
-
   if (!response) return null;
 
   const { requiresConfirmation, match } = response.data;
@@ -33,7 +23,7 @@ export function PhraseValidationFeedback({
     <FeedbackMessage
       variant="warning"
       title={
-        match?.type === "textual_exact"
+        match?.type === PhraseMatchType.TEXTUAL_EXACT
           ? "Coincidencia textual exacta"
           : "Posible coincidencia semántica"
       }
@@ -41,7 +31,7 @@ export function PhraseValidationFeedback({
     >
       {match && (
         <>
-          {match.type === "vector" && (
+          {match.type === PhraseMatchType.VECTOR && (
             <p className="inline-block rounded-full bg-warning-badge px-2.5 py-1 text-xs font-bold text-warning-action tabular-nums">
               Similitud semántica · {Math.round(match.similarityScore * 100)} %
             </p>
@@ -50,7 +40,7 @@ export function PhraseValidationFeedback({
           <p className="mt-1 text-lg leading-snug font-medium tracking-[-0.015em]">
             “{match.phrase.text}”
           </p>
-          {match.type === "vector" && (
+          {match.type === PhraseMatchType.VECTOR && (
             <p className="mt-2 text-xs leading-5">
               El puntaje indica similitud; tú decides si es un duplicado.
             </p>

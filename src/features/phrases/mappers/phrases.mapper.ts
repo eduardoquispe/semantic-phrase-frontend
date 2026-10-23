@@ -1,3 +1,4 @@
+import { PhraseMatchType } from '../interfaces/phrase-match-type.enum'
 import type {
   PhraseDTO,
   PhraseListQueryDTO,
@@ -45,13 +46,13 @@ export const phrasesMappers = {
       };
 
       match =
-        sourceMatch.type === "vector"
+        sourceMatch.type === PhraseMatchType.VECTOR
           ? {
-              type: "vector",
+              type: PhraseMatchType.VECTOR,
               phrase,
               similarityScore: sourceMatch.similarityScore,
             }
-          : { type: "textual_exact", phrase, similarityScore: null };
+          : { type: PhraseMatchType.TEXTUAL_EXACT, phrase, similarityScore: null };
     }
 
     return {

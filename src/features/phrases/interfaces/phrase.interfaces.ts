@@ -1,3 +1,4 @@
+import type { PhraseMatchType } from './phrase-match-type.enum'
 export interface ListPhrasesQuery {
   page?: number;
   limit?: number;
@@ -7,6 +8,16 @@ export interface Phrase {
   id: string;
   text: string;
   createdAt: string;
+}
+
+export interface CreatePhraseRequest {
+  text: string
+  validationId: string
+  confirmed?: boolean
+}
+
+export interface CreatePhraseResponse {
+  data: Phrase
 }
 
 export interface PageMeta {
@@ -43,12 +54,12 @@ export type ValidatePhraseResponse = {
     match:
       | null
       | {
-          type: "vector";
+          type: PhraseMatchType.VECTOR;
           phrase: MatchedPhrase;
           similarityScore: number;
         }
       | {
-          type: "textual_exact";
+          type: PhraseMatchType.TEXTUAL_EXACT;
           phrase: MatchedPhrase;
           similarityScore: null;
         };

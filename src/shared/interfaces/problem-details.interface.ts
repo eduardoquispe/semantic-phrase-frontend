@@ -1,0 +1,25 @@
+export interface FieldError {
+  field: string;
+  messages: string[];
+}
+
+export interface ProblemDetails {
+  title: string;
+  status: number;
+  detail: string;
+  code: ApiErrorCode;
+  errors?: FieldError[];
+}
+
+export enum ApiErrorCode {
+  VALIDATION_ERROR = "VALIDATION_ERROR",
+  INVALID_VALIDATION_ID = "INVALID_VALIDATION_ID",
+  PHRASE_MISMATCH = "PHRASE_MISMATCH",
+  VALIDATION_EXPIRED = "VALIDATION_EXPIRED",
+  VALIDATION_ALREADY_USED = "VALIDATION_ALREADY_USED",
+  CONFIRMATION_REQUIRED = "CONFIRMATION_REQUIRED",
+  RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED",
+  INTERNAL_ERROR = "INTERNAL_ERROR",
+  AI_UNAVAILABLE = "AI_UNAVAILABLE",
+  DATABASE_UNAVAILABLE = "DATABASE_UNAVAILABLE",
+}

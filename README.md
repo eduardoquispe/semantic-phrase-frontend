@@ -1,5 +1,11 @@
 # React + TypeScript + Vite
 
+## Configuración de la API
+
+Copia `.env.example` a `.env` y configura `VITE_API_BASE_URL` con la URL base de la API, incluido `/api/v1`. El valor local es `http://localhost:3000/api/v1`.
+
+Las llamadas usan el cliente compartido de `src/shared/api/http-client.ts`. Reinicia Vite después de cambiar `.env`.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

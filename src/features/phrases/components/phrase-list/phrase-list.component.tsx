@@ -23,7 +23,7 @@ export function PhraseList() {
           </p>
         </div>
         <span className="rounded-full bg-brand-soft px-3 py-1.5 text-xs font-bold text-brand tabular-nums">
-          {phrases.length} frases
+          {meta?.total} frases
         </span>
       </div>
       <ul
