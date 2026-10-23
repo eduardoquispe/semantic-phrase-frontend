@@ -10,6 +10,7 @@ const queryClient = new QueryClient({
     },
     mutations: {
       retry: false,
+      networkMode: "offlineFirst",
     },
   },
 });

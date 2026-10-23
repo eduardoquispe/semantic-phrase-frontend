@@ -114,7 +114,8 @@ export function PhraseForm() {
       </form>
       <PhraseFormFeedback
         response={validate.data}
-        error={save.error ?? validate.error}
+        validateError={validate.error}
+        saveError={save.error}
         isSaveSuccess={save.isSuccess}
       />
     </section>

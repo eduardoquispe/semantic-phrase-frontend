@@ -78,7 +78,7 @@ describe('PhrasesPage', () => {
     const input = screen.getByLabelText('Frase en español')
     await user.type(input, phrase.text)
     await user.click(screen.getByRole('button', { name: 'Validar' }))
-    await screen.findByText('Frase validada')
+    await screen.findByText('No encontramos una posible coincidencia.')
     expect(phraseService.validate).toHaveBeenCalledExactlyOnceWith({ text: phrase.text })
     expect(phraseService.save).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Guardar' }))

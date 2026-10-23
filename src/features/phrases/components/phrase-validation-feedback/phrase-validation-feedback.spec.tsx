@@ -21,8 +21,10 @@ it("renders nothing without a response", () => {
 it("shows successful validation without confirmation", () => {
   render(<PhraseValidationFeedback response={response} />);
   expect(
-    screen.getByRole("status", { name: "Frase validada" }),
-  ).toHaveTextContent("No se encontró ninguna coincidencia.");
+    screen.getByRole("status", {
+      name: "No encontramos una posible coincidencia.",
+    }),
+  ).toHaveTextContent("Puedes guardar la frase si deseas añadirla a la lista.");
 });
 
 it("shows the matching phrase and rounded semantic score", () => {
@@ -40,10 +42,11 @@ it("shows the matching phrase and rounded semantic score", () => {
     />,
   );
 
-  expect(
-    screen.getByRole("status", { name: "Posible coincidencia semántica" }),
-  ).toHaveTextContent("Se requiere tu confirmación");
-  expect(screen.getByText("“Hola mundo”")).toBeInTheDocument();
+  const message = screen.getByRole("status", {
+    name: "Posible coincidencia semántica",
+  });
+  expect(message).toHaveTextContent("“Hola mundo”");
+  expect(message).not.toHaveTextContent("Se requiere tu confirmación");
   expect(screen.getByText("Similitud semántica · 91 %")).toBeInTheDocument();
 });
 
@@ -62,8 +65,13 @@ it("shows an exact match without a semantic score", () => {
     />,
   );
 
+  const message = screen.getByRole("status", {
+    name: "Posible coincidencia textual",
+  });
+  expect(message).toHaveTextContent("“Hola mundo”");
+  expect(screen.getByText("Coincidencia textual · 100 %")).toBeInTheDocument();
   expect(
-    screen.getByRole("status", { name: "Coincidencia textual exacta" }),
-  ).toHaveTextContent("“Hola mundo”");
+    screen.getByText("Comparación textual, sin intervención del modelo de IA."),
+  ).toBeInTheDocument();
   expect(screen.queryByText(/Similitud semántica/)).not.toBeInTheDocument();
 });

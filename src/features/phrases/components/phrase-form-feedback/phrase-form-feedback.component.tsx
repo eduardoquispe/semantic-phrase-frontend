@@ -5,17 +5,32 @@ import type { PhraseFormFeedbackProps } from "./phrase-form-feedback.types";
 
 export function PhraseFormFeedback({
   response,
-  error,
+  validateError,
+  saveError,
   isSaveSuccess,
 }: PhraseFormFeedbackProps) {
-  if (!response && !error && !isSaveSuccess) return null;
+  if (!response && !validateError && !saveError && !isSaveSuccess) return null;
 
   return (
     <div className="border-t border-divider px-5 py-4 sm:px-6 sm:py-5">
-      {error ? (
-        <FeedbackMessage variant="error" title={getErrorMessage(error)} />
+      {saveError ? (
+        <FeedbackMessage
+          variant="error"
+          title={getErrorMessage(saveError)}
+          description="Tu texto se conserva. Vuelve a intentar el guardado."
+        />
+      ) : validateError ? (
+        <FeedbackMessage
+          variant="error"
+          title={getErrorMessage(validateError)}
+          description="Tu texto sigue aquí. Intenta validarlo de nuevo."
+        />
       ) : isSaveSuccess ? (
-        <FeedbackMessage variant="success" title="Frase guardada" />
+        <FeedbackMessage
+          variant="success"
+          title="Frase guardada"
+          description="Ya aparece al principio de la lista compartida."
+        />
       ) : (
         <PhraseValidationFeedback response={response} />
       )}

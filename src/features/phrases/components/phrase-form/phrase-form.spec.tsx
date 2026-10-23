@@ -80,17 +80,14 @@ describe("PhraseForm", () => {
     await user.type(input, 'Hola mundo')
     fireEvent.submit(input.closest('form')!)
     if (operation === 'save') {
-      await screen.findByText('Frase validada')
+      await screen.findByText('No encontramos una posible coincidencia.')
       await user.click(screen.getByRole('button', { name: 'Guardar' }))
     }
 
     const alerts = await screen.findAllByRole('alert')
-    expect(alerts.map(alert => alert.textContent)).toEqual(
-      expect.arrayContaining([
-        message ?? 'Ocurrió un error. Inténtalo de nuevo.',
-        'Este campo es inválido',
-      ]),
-    )
+    const texts = alerts.map(alert => alert.textContent ?? '')
+    expect(texts.some(text => text.includes(message ?? 'Ocurrió un error. Inténtalo de nuevo.'))).toBe(true)
+    expect(texts.some(text => text.includes('Este campo es inválido'))).toBe(true)
     expect(input.value).toBe('Hola mundo')
     expect((screen.getByRole('button', { name: 'Guardar' }) as HTMLButtonElement).disabled).toBe(true)
   })
@@ -101,7 +98,7 @@ describe("PhraseForm", () => {
     const input = screen.getByLabelText('Frase en español') as HTMLInputElement
     await user.type(input, '  Hola mundo  ')
     fireEvent.submit(input.closest('form')!)
-    await screen.findByText('Frase validada')
+    await screen.findByText('No encontramos una posible coincidencia.')
     expect(validate).toHaveBeenCalledExactlyOnceWith({ text: 'Hola mundo' })
 
     await user.click(screen.getByRole('button', { name: 'Guardar' }))
@@ -113,10 +110,10 @@ describe("PhraseForm", () => {
 
     await user.type(input, 'Otra frase')
     fireEvent.submit(input.closest('form')!)
-    await screen.findByText('Frase validada')
+    await screen.findByText('No encontramos una posible coincidencia.')
     await user.type(input, ' diferente')
     expect((screen.getByRole('button', { name: 'Guardar' }) as HTMLButtonElement).disabled).toBe(true)
-    expect(screen.queryByText('Frase validada')).toBeNull()
+    expect(screen.queryByText('No encontramos una posible coincidencia.')).toBeNull()
   })
 
   it("starts without feedback and shows schema errors with input focus", async () => {
@@ -160,8 +157,8 @@ describe("PhraseForm", () => {
     await waitFor(() =>
       expect(validate).toHaveBeenCalledExactlyOnceWith({ text: "Hola mundo" }),
     );
-    await screen.findByText("Frase validada");
-    expectSingleFeedback("status", "Frase validada");
+    await screen.findByText("No encontramos una posible coincidencia.");
+    expectSingleFeedback("status", "No encontramos una posible coincidencia.");
     expect(save).not.toHaveBeenCalled();
     expect((screen.getByRole("button", { name: "Guardar" }) as HTMLButtonElement).disabled).toBe(false);
     expect(screen.queryByText("Frase guardada")).toBeNull();
@@ -216,13 +213,15 @@ describe("PhraseForm", () => {
       PhraseMatchType.VECTOR,
       { type: PhraseMatchType.VECTOR, phrase, similarityScore: 0.914 },
       "Posible coincidencia semántica",
+      "Similitud semántica · 91 %",
     ],
     [
       "exact",
       { type: PhraseMatchType.TEXTUAL_EXACT, phrase, similarityScore: null },
-      "Coincidencia textual exacta",
+      "Posible coincidencia textual",
+      "Coincidencia textual · 100 %",
     ],
-  ] as const)("shows one warning for a %s match", async (_, match, title) => {
+  ] as const)("shows one warning for a %s match", async (_, match, title, badge) => {
     const user = userEvent.setup();
     validate.mockResolvedValue({ ...success, requiresConfirmation: true, match });
     renderForm();
@@ -232,11 +231,7 @@ describe("PhraseForm", () => {
     await screen.findByText(title);
     expectSingleFeedback("status", title);
     expect(screen.getByText(`“${phrase.text}”`)).toBeTruthy();
-    if (match.type === PhraseMatchType.VECTOR) {
-      expect(screen.getByText("Similitud semántica · 91 %")).toBeTruthy();
-    } else {
-      expect(screen.getByRole("status").textContent).not.toContain("%");
-    }
+    expect(screen.getByText(badge)).toBeTruthy();
     expect((screen.getByRole("button", { name: "Guardar de todos modos" }) as HTMLButtonElement).disabled).toBe(false);
     expect(save).not.toHaveBeenCalled();
     await user.click(screen.getByRole("button", { name: "Guardar de todos modos" }));
@@ -254,8 +249,8 @@ describe("PhraseForm", () => {
     await user.type(screen.getByLabelText("Frase en español"), "Hola");
     await user.click(screen.getByRole("button", { name: "Validar" }));
 
-    await screen.findByText("Frase validada");
-    expectSingleFeedback("status", "Frase validada");
+    await screen.findByText("No encontramos una posible coincidencia.");
+    expectSingleFeedback("status", "No encontramos una posible coincidencia.");
     expect(screen.queryByText("Frase existente")).toBeNull();
   });
 
@@ -285,9 +280,9 @@ describe("PhraseForm", () => {
     await act(async () => {
       finishValidation(success);
     });
-    await screen.findByText("Frase validada");
+    await screen.findByText("No encontramos una posible coincidencia.");
     expect(validate).toHaveBeenCalledTimes(2);
-    expectSingleFeedback("status", "Frase validada");
+    expectSingleFeedback("status", "No encontramos una posible coincidencia.");
   });
 
   it.each(["success", "warning", "error"] as const)(
@@ -320,7 +315,7 @@ describe("PhraseForm", () => {
     renderForm();
     await user.type(screen.getByLabelText("Frase en español"), "Hola");
     await user.click(screen.getByRole("button", { name: "Validar" }));
-    await screen.findByText("Frase validada");
+    await screen.findByText("No encontramos una posible coincidencia.");
 
     let finishValidation!: (response: ValidatePhraseResponse) => void;
     validate.mockImplementationOnce(
@@ -335,8 +330,8 @@ describe("PhraseForm", () => {
     await act(async () => {
       finishValidation(success);
     });
-    await screen.findByText("Frase validada");
-    expectSingleFeedback("status", "Frase validada");
+    await screen.findByText("No encontramos una posible coincidencia.");
+    expectSingleFeedback("status", "No encontramos una posible coincidencia.");
   });
 });
 
@@ -349,7 +344,7 @@ describe('PhraseForm saving', () => {
     expect((screen.getByRole('button', { name: 'Guardar' }) as HTMLButtonElement).disabled).toBe(true)
     await user.type(input, '  Hola mundo  ')
     await user.click(screen.getByRole('button', { name: 'Validar' }))
-    await screen.findByText('Frase validada')
+    await screen.findByText('No encontramos una posible coincidencia.')
     return { user, input, ...view }
   }
 
@@ -402,7 +397,7 @@ describe('PhraseForm saving', () => {
     await user.click(button)
     expect(save).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Validar' }))
-    await screen.findByText('Frase validada')
+    await screen.findByText('No encontramos una posible coincidencia.')
     expect(button.disabled).toBe(false)
   })
 
@@ -421,7 +416,7 @@ describe('PhraseForm saving', () => {
       expect(client.getQueryState(['phrases'])?.isInvalidated).toBe(false)
       expect(save).toHaveBeenCalledTimes(1)
       await user.click(screen.getByRole('button', { name: 'Validar' }))
-      await screen.findByText('Frase validada')
+      await screen.findByText('No encontramos una posible coincidencia.')
       expect(save).toHaveBeenCalledTimes(1)
       await user.click(screen.getByRole('button', { name: 'Guardar' }))
       await screen.findByText('Frase guardada')

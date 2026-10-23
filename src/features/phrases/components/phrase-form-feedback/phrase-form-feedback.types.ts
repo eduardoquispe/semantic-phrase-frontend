@@ -1,7 +1,8 @@
-import type { ValidatePhraseResponse } from '../../interfaces/phrase-validation.interfaces'
+import type { ValidatePhraseResponse } from "../../interfaces/phrase-validation.interfaces";
 
 export type PhraseFormFeedbackProps = {
-  response: ValidatePhraseResponse | undefined
-  error: unknown
-  isSaveSuccess: boolean
-}
+  response: ValidatePhraseResponse | undefined;
+  validateError: unknown;
+  saveError: unknown;
+  isSaveSuccess: boolean;
+};
