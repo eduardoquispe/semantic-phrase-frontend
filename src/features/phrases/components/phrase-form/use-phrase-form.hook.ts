@@ -34,6 +34,8 @@ export function usePhraseForm() {
     save.reset();
     try {
       await validate.mutateAsync({ text: values.text });
+    } catch {
+      // The mutation exposes the error to PhraseFormFeedback.
     } finally {
       inFlight.current = false;
     }
@@ -50,6 +52,8 @@ export function usePhraseForm() {
         ...(validate.data.data.requiresConfirmation ? { confirmed: true } : {}),
       });
       resetForm({ text: "" });
+    } catch {
+      // Preserve the input; the mutation exposes the error to PhraseFormFeedback.
     } finally {
       validate.reset();
       inFlight.current = false;

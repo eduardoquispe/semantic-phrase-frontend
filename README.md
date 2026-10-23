@@ -1,5 +1,13 @@
 # React + TypeScript + Vite
 
+## Pruebas
+
+Validado con Node 22.12.0. Se usa jsdom 26 para mantener la compatibilidad con esta versión de Node.
+
+Ejecuta `pnpm test` para correr toda la suite con Vitest, React Testing Library y jsdom. Los tests de componentes viven junto al componente y usan el nombre `<componente>.spec.tsx`. No requieren un backend activo.
+
+Para revisar tipos, lint y compilación, ejecuta también `pnpm lint` y `pnpm build`.
+
 ## Configuración de la API
 
 Copia `.env.example` a `.env` y configura `VITE_API_BASE_URL` con la URL base de la API, incluido `/api/v1`. El valor local es `http://localhost:3000/api/v1`.

@@ -32,6 +32,7 @@ export function PhraseForm() {
       </div>
       <form
         noValidate
+        aria-busy={isBusy}
         onSubmit={(event) => {
           void handleSubmit(onSubmit)(event);
         }}
