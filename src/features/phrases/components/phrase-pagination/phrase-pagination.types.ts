@@ -1,4 +1,5 @@
 export interface PhrasePaginationProps {
-  readonly page: number
-  readonly totalPages: number
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 }

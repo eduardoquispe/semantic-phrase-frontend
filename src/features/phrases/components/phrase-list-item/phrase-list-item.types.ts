@@ -1,9 +1,5 @@
-export interface PhraseListItemData {
-  readonly text: string
-  readonly dateTime: string
-  readonly dateLabel: string
-}
+import type { Phrase } from "../../model/phrase.model";
 
 export interface PhraseListItemProps {
-  readonly phrase: PhraseListItemData
+  phrase: Phrase;
 }
