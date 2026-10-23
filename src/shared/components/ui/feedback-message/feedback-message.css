@@ -1,0 +1,49 @@
+.feedback-message--success {
+  --feedback-surface: var(--color-brand-soft);
+  --feedback-ink: var(--color-success-ink);
+  --feedback-action: var(--color-brand);
+  --feedback-action-hover: var(--color-brand-hover);
+  --feedback-border: var(--color-control-border);
+}
+
+.feedback-message--error {
+  --feedback-surface: var(--color-danger-soft);
+  --feedback-ink: var(--color-danger-ink);
+  --feedback-action: var(--color-danger);
+  --feedback-action-hover: var(--color-danger-ink);
+  --feedback-border: var(--color-danger);
+}
+
+.feedback-message--warning {
+  --feedback-surface: var(--color-warning-soft);
+  --feedback-ink: var(--color-warning-ink);
+  --feedback-action: var(--color-warning-action);
+  --feedback-action-hover: var(--color-warning-ink);
+  --feedback-border: var(--color-warning-border);
+}
+
+.feedback-message {
+  color: var(--feedback-ink);
+  background-color: var(--feedback-surface);
+}
+
+.feedback-message .feedback-message__action {
+  color: var(--feedback-action);
+  border-color: var(--feedback-border);
+}
+
+.feedback-message .feedback-message__action:enabled:hover {
+  color: white;
+  background-color: var(--feedback-action-hover);
+  border-color: var(--feedback-action-hover);
+}
+
+.feedback-message .feedback-message__action:focus-visible {
+  outline-color: var(--feedback-action);
+}
+
+.feedback-message .feedback-message__action--primary {
+  color: white;
+  background-color: var(--feedback-action);
+  border-color: var(--feedback-action);
+}

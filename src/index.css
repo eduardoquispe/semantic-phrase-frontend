@@ -18,6 +18,14 @@
   --color-disabled: #E7ECE8;
   --color-disabled-ink: #718079;
   --color-danger: #A43E38;
+  --color-success-ink: #1F5649;
+  --color-danger-soft: #FCEDEC;
+  --color-danger-ink: #812E2A;
+  --color-warning-soft: #FFF7E7;
+  --color-warning-ink: #463719;
+  --color-warning-action: #694D0C;
+  --color-warning-border: #C9B587;
+  --color-warning-badge: #F5E7C9;
   --color-footer: #FBFCFA;
 }
 

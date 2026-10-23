@@ -5,6 +5,7 @@ import { Input } from "../../../../shared/components/ui/input";
 import { phraseFormSchema } from "./phrase-form.schema";
 import type { PhraseFormValues } from "./phrase-form.schema";
 import type { PhraseFormProps } from "./phrase-form.types";
+import { FeedbackMessage } from "../../../../shared/components/ui/feedback-message";
 
 export function PhraseForm({ onValidate }: PhraseFormProps) {
   const {
@@ -78,6 +79,51 @@ export function PhraseForm({ onValidate }: PhraseFormProps) {
           </Button>
         </div>
       </form>
+      <div className="border-t border-divider px-5 py-4 sm:px-6 sm:py-5">
+        <FeedbackMessage
+          variant="success"
+          title="Frase guardada"
+          description="Ya aparece al principio de la lista compartida."
+        />
+        <FeedbackMessage
+          variant="error"
+          title="No pudimos validar la frase"
+          description="Tu texto sigue aquí. Intenta validarlo de nuevo."
+          actions={[
+            {
+              label: "Reintentar validación",
+              onClick: () => console.log("Reintentar validación"),
+            },
+          ]}
+        />
+        <FeedbackMessage
+          variant="warning"
+          title="Posible coincidencia semántica"
+          actions={[
+            {
+              label: "Guardar de todos modos",
+              emphasis: "primary",
+              onClick: () => console.log("Guardar de todos modos"),
+            },
+            {
+              label: "Cancelar",
+              emphasis: "secondary",
+              onClick: () => console.log("Cancelar"),
+            },
+          ]}
+        >
+          <p className="inline-block rounded-full bg-warning-badge px-2.5 py-1 text-xs font-bold text-warning-action tabular-nums">
+            Similitud semántica · 91 %
+          </p>
+          <p className="mt-3 text-xs font-bold">Frase existente</p>
+          <p className="mt-1 text-lg leading-snug font-medium tracking-[-0.015em]">
+            “Quiero cambiar la fecha de mi consulta médica”
+          </p>
+          <p className="mt-2 text-xs leading-5">
+            El puntaje indica similitud; tú decides si es un duplicado.
+          </p>
+        </FeedbackMessage>
+      </div>
     </section>
   );
 }
