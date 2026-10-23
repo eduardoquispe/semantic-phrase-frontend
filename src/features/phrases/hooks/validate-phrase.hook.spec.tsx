@@ -18,10 +18,8 @@ function createWrapper() {
 
 it('validates the submitted text and exposes the response', async () => {
   const response = {
-    data: {
-      validationId: 'validation-id', expiresAt: '2026-10-22T19:15:00Z',
-      requiresConfirmation: false, match: null,
-    },
+    validationId: 'validation-id', expiresAt: '2026-10-22T19:15:00Z',
+    requiresConfirmation: false, match: null,
   }
   vi.mocked(phraseService.validate).mockResolvedValue(response)
   const { result } = renderHook(useValidatePhrase, { wrapper: createWrapper() })

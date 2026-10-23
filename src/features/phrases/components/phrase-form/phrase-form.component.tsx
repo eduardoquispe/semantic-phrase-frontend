@@ -14,14 +14,17 @@ export function PhraseForm() {
     save,
     isValidating,
     isBusy,
+    serverFieldError,
     onSubmit,
     onSave,
   } = usePhraseForm();
 
   const fieldError = errors.text;
+  const hasFieldError = Boolean(fieldError) || Boolean(serverFieldError);
   const charCount = Array.from(text.trim()).length;
   const helpText =
     fieldError?.message ??
+    serverFieldError ??
     `Una línea · De 1 a ${PHRASE_MAX_LENGTH} caracteres · Al menos una palabra`;
   const submitLabel = isValidating ? "Validando…" : "Validar";
   const saveLabel = save.isPending
@@ -65,7 +68,7 @@ export function PhraseForm() {
           type="text"
           autoComplete="off"
           placeholder="Escribe una frase corta"
-          aria-invalid={Boolean(fieldError)}
+          aria-invalid={hasFieldError}
           aria-describedby="phrase-help"
           readOnly={isBusy}
           className="mt-2"
@@ -73,8 +76,8 @@ export function PhraseForm() {
         <div className="mt-2 flex min-h-5 flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs text-caption">
           <span
             id="phrase-help"
-            role={fieldError ? "alert" : undefined}
-            className={fieldError ? "text-danger" : undefined}
+            role={hasFieldError ? "alert" : undefined}
+            className={hasFieldError ? "text-danger" : undefined}
           >
             {helpText}
           </span>

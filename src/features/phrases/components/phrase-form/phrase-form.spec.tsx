@@ -61,7 +61,7 @@ describe("PhraseForm", () => {
     ['validate', undefined],
     ['save', 'Mensaje de la API'],
     ['save', undefined],
-  ] as const)('shows only API error messages for %s (detail=%s)', async (operation, message) => {
+  ] as const)('shows the API detail and the field error for %s (detail=%s)', async (operation, message) => {
     const user = userEvent.setup()
     const error = {
       isAxiosError: true,
@@ -70,7 +70,7 @@ describe("PhraseForm", () => {
         status: 400,
         code: 'VALIDATION_ERROR',
         detail: message,
-        errors: [{ field: 'text', messages: ['Este detalle no debe mostrarse'] }],
+        errors: [{ field: 'text', messages: ['Este campo es inválido'] }],
       } },
     }
     if (operation === 'validate') validate.mockRejectedValueOnce(error)
@@ -84,8 +84,12 @@ describe("PhraseForm", () => {
       await user.click(screen.getByRole('button', { name: 'Guardar' }))
     }
 
-    expect((await screen.findByRole('alert')).textContent).toBe(
-      message ?? 'Ocurrió un error. Inténtalo de nuevo.',
+    const alerts = await screen.findAllByRole('alert')
+    expect(alerts.map(alert => alert.textContent)).toEqual(
+      expect.arrayContaining([
+        message ?? 'Ocurrió un error. Inténtalo de nuevo.',
+        'Este campo es inválido',
+      ]),
     )
     expect(input.value).toBe('Hola mundo')
     expect((screen.getByRole('button', { name: 'Guardar' }) as HTMLButtonElement).disabled).toBe(true)

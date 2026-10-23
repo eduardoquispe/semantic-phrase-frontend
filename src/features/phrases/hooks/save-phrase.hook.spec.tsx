@@ -22,7 +22,7 @@ function setup() {
 }
 
 it('saves the phrase and invalidates cached phrase pages', async () => {
-  const response = { data: { id: 'phrase-id', text: request.text, createdAt: '22/10/2026' } }
+  const response = { id: 'phrase-id', text: request.text, createdAt: '22/10/2026' }
   vi.mocked(phraseService.save).mockResolvedValue(response)
   const { client, result } = setup()
   client.setQueryData(['phrases', { page: 1 }], { data: [] })

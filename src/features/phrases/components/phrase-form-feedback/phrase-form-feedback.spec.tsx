@@ -4,12 +4,10 @@ import type { ValidatePhraseResponse } from '../../interfaces/phrase-validation.
 import { PhraseFormFeedback } from './phrase-form-feedback.component'
 
 const response: ValidatePhraseResponse = {
-  data: {
-    validationId: 'validation-id',
-    expiresAt: '2026-10-22T19:15:00Z',
-    requiresConfirmation: false,
-    match: null,
-  },
+  validationId: 'validation-id',
+  expiresAt: '2026-10-22T19:15:00Z',
+  requiresConfirmation: false,
+  match: null,
 }
 
 it('renders nothing before a result', () => {
