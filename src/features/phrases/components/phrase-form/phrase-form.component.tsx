@@ -1,6 +1,7 @@
 import { Button } from "../../../../shared/components/ui/button";
 import { Input } from "../../../../shared/components/ui/input";
 import { PhraseFormFeedback } from "../phrase-form-feedback";
+import { PHRASE_MAX_LENGTH } from "./phrase-form.constants";
 import { usePhraseForm } from "./use-phrase-form.hook";
 
 export function PhraseForm() {
@@ -16,6 +17,18 @@ export function PhraseForm() {
     onSubmit,
     onSave,
   } = usePhraseForm();
+
+  const fieldError = errors.text;
+  const charCount = Array.from(text.trim()).length;
+  const helpText =
+    fieldError?.message ??
+    `Una línea · De 1 a ${PHRASE_MAX_LENGTH} caracteres · Al menos una palabra`;
+  const submitLabel = isValidating ? "Validando…" : "Validar";
+  const saveLabel = save.isPending
+    ? "Guardando…"
+    : validate.data?.requiresConfirmation
+      ? "Guardar de todos modos"
+      : "Guardar";
 
   return (
     <section
@@ -52,7 +65,7 @@ export function PhraseForm() {
           type="text"
           autoComplete="off"
           placeholder="Escribe una frase corta"
-          aria-invalid={Boolean(errors.text)}
+          aria-invalid={Boolean(fieldError)}
           aria-describedby="phrase-help"
           readOnly={isBusy}
           className="mt-2"
@@ -60,18 +73,18 @@ export function PhraseForm() {
         <div className="mt-2 flex min-h-5 flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs text-caption">
           <span
             id="phrase-help"
-            role={errors.text ? "alert" : undefined}
-            className={errors.text ? "text-danger" : undefined}
+            role={fieldError ? "alert" : undefined}
+            className={fieldError ? "text-danger" : undefined}
           >
-            {errors.text?.message ??
-              "Una línea · De 1 a 280 caracteres · Al menos una palabra"}
+            {helpText}
           </span>
           <span className="tabular-nums">
-            {Array.from(text.trim()).length} / 280
+            {charCount} / {PHRASE_MAX_LENGTH}
           </span>
         </div>
         <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:items-center">
           <Button type="submit" disabled={isBusy}>
+            {/* Invisible placeholder keeps the button width stable while the label toggles. */}
             <span className="inline-grid">
               <span
                 aria-hidden="true"
@@ -80,7 +93,7 @@ export function PhraseForm() {
                 Validando…
               </span>
               <span className="col-start-1 row-start-1" aria-live="polite">
-                {isValidating ? "Validando…" : "Validar"}
+                {submitLabel}
               </span>
             </span>
           </Button>
@@ -92,11 +105,7 @@ export function PhraseForm() {
               void handleSubmit(onSave)(event);
             }}
           >
-            {save.isPending
-              ? "Guardando…"
-              : validate.data?.data.requiresConfirmation
-                ? "Guardar de todos modos"
-                : "Guardar"}
+            {saveLabel}
           </Button>
         </div>
       </form>

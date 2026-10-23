@@ -7,7 +7,7 @@ export function PhraseValidationFeedback({
 }: PhraseValidationFeedbackProps) {
   if (!response) return null;
 
-  const { requiresConfirmation, match } = response.data;
+  const { requiresConfirmation, match } = response;
 
   if (!requiresConfirmation) {
     return (

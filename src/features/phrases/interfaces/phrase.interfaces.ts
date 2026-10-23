@@ -1,8 +1,4 @@
-import type { PhraseMatchType } from './phrase-match-type.enum'
-export interface ListPhrasesQuery {
-  page?: number;
-  limit?: number;
-}
+import type { PageMeta } from '../../../shared/interfaces/pagination.interface'
 
 export interface Phrase {
   id: string;
@@ -16,16 +12,7 @@ export interface CreatePhraseRequest {
   confirmed?: boolean
 }
 
-export interface CreatePhraseResponse {
-  data: Phrase
-}
-
-export interface PageMeta {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
+export type CreatePhraseResponse = Phrase
 
 export interface PhraseListQuery {
   page?: number;
@@ -36,32 +23,3 @@ export interface PhraseListResponse {
   data: Phrase[];
   meta: PageMeta;
 }
-
-export type ValidatePhraseRequest = {
-  text: string;
-};
-
-export type MatchedPhrase = {
-  id: string; // UUID
-  text: string;
-};
-
-export type ValidatePhraseResponse = {
-  data: {
-    validationId: string;
-    expiresAt: string; // ISO 8601
-    requiresConfirmation: boolean;
-    match:
-      | null
-      | {
-          type: PhraseMatchType.VECTOR;
-          phrase: MatchedPhrase;
-          similarityScore: number;
-        }
-      | {
-          type: PhraseMatchType.TEXTUAL_EXACT;
-          phrase: MatchedPhrase;
-          similarityScore: null;
-        };
-  };
-};

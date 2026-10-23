@@ -18,8 +18,10 @@ export function usePhraseForm() {
     defaultValues: { text: "" },
     mode: "onChange",
   });
+
   const validate = useValidatePhrase();
   const save = useSavePhrase();
+
   const inFlight = useRef(false);
   const isValidating = validate.isPending;
   const isBusy = isSubmitting || isValidating || save.isPending;
@@ -48,8 +50,8 @@ export function usePhraseForm() {
     try {
       await save.mutateAsync({
         text: values.text,
-        validationId: validate.data.data.validationId,
-        ...(validate.data.data.requiresConfirmation ? { confirmed: true } : {}),
+        validationId: validate.data.validationId,
+        ...(validate.data.requiresConfirmation ? { confirmed: true } : {}),
       });
       resetForm({ text: "" });
     } catch {
@@ -67,8 +69,8 @@ export function usePhraseForm() {
     text,
     validate,
     save,
-    isValidating,
     isBusy,
+    isValidating,
     onSubmit,
     onSave,
   };

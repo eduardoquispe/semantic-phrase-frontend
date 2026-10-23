@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PHRASE_MAX_LENGTH } from "./phrase-form.constants";
 
 export const phraseFormSchema = z.object({
   text: z
@@ -14,8 +15,8 @@ export const phraseFormSchema = z.object({
     .trim()
     .refine((text) => Array.from(text).length >= 1, "Ingresa una frase.")
     .refine(
-      (text) => Array.from(text).length <= 280,
-      "La frase debe tener como máximo 280 caracteres.",
+      (text) => Array.from(text).length <= PHRASE_MAX_LENGTH,
+      `La frase debe tener como máximo ${PHRASE_MAX_LENGTH} caracteres.`,
     )
     .regex(/\p{L}/u, "La frase debe contener al menos una letra."),
 });

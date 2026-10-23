@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { phraseService } from "../services/phrases.service";
-import type { ValidatePhraseRequest } from "../interfaces/phrase.interfaces";
+import type { ValidatePhraseRequest } from "../interfaces/phrase-validation.interfaces";
 
 export const useValidatePhrase = () => {
   return useMutation({

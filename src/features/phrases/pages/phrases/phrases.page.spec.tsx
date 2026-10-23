@@ -66,14 +66,12 @@ describe('PhrasesPage', () => {
       .mockResolvedValueOnce(emptyList)
       .mockResolvedValue(populatedList)
     vi.mocked(phraseService.validate).mockResolvedValue({
-      data: {
-        validationId: 'validation-id',
-        expiresAt: '2026-10-22T19:15:00Z',
-        requiresConfirmation: false,
-        match: null,
-      },
+      validationId: 'validation-id',
+      expiresAt: '2026-10-22T19:15:00Z',
+      requiresConfirmation: false,
+      match: null,
     })
-    vi.mocked(phraseService.save).mockResolvedValue({ data: phrase })
+    vi.mocked(phraseService.save).mockResolvedValue(phrase)
     renderPage()
     await screen.findByText('0 frases')
 

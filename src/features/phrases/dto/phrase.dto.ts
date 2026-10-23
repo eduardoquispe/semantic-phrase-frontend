@@ -1,5 +1,5 @@
 import type { PhraseMatchType } from '../interfaces/phrase-match-type.enum'
-import type { PageMeta } from "../interfaces/phrase.interfaces";
+import type { PageMeta } from "../../../shared/interfaces/pagination.interface";
 
 export interface PhraseDTO {
   id: string;
@@ -36,22 +36,27 @@ type MatchedPhraseDTO = {
   text: string;
 };
 
+type VectorMatchDTO = {
+  type: PhraseMatchType.VECTOR;
+  phrase: MatchedPhraseDTO;
+  similarityScore: number;
+};
+
+type TextualExactMatchDTO = {
+  type: PhraseMatchType.TEXTUAL_EXACT;
+  phrase: MatchedPhraseDTO;
+  similarityScore: null;
+};
+
+export type PhraseMatchDTO = VectorMatchDTO | TextualExactMatchDTO;
+
+export type ValidatePhraseResponseDataDTO = {
+  validationId: string;
+  expiresAt: string; // ISO 8601
+  requiresConfirmation: boolean;
+  match: PhraseMatchDTO | null;
+};
+
 export type ValidatePhraseResponseDTO = {
-  data: {
-    validationId: string;
-    expiresAt: string; // ISO 8601
-    requiresConfirmation: boolean;
-    match:
-      | null
-      | {
-          type: PhraseMatchType.VECTOR;
-          phrase: MatchedPhraseDTO;
-          similarityScore: number;
-        }
-      | {
-          type: PhraseMatchType.TEXTUAL_EXACT;
-          phrase: MatchedPhraseDTO;
-          similarityScore: null;
-        };
-  };
+  data: ValidatePhraseResponseDataDTO;
 };

@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import type { ValidatePhraseResponseDTO } from '../data/phrases.dto'
+import type { ValidatePhraseResponseDTO } from '../dto/phrase.dto'
 import { PhraseMatchType } from '../interfaces/phrase-match-type.enum'
-import { phrasesMappers } from './phrases.mapper'
+import {
+  toPhraseList,
+  toPhraseListItemData,
+  toPhraseListQuery,
+  toValidatePhraseRequestDTO,
+  toValidatePhraseResponse,
+} from './phrases.mapper'
 
 const phrase = {
   id: 'phrase-id',
@@ -9,9 +15,9 @@ const phrase = {
   createdAt: '2026-10-22T19:00:00Z',
 }
 
-describe('phrasesMappers', () => {
+describe('phrasesMapper', () => {
   it('converts the phrase date to the local display format', () => {
-    expect(phrasesMappers.toPhraseListItemData(phrase)).toEqual({
+    expect(toPhraseListItemData(phrase)).toEqual({
       id: phrase.id,
       text: phrase.text,
       createdAt: new Intl.DateTimeFormat().format(new Date(phrase.createdAt)),
@@ -21,7 +27,7 @@ describe('phrasesMappers', () => {
   it('maps list items and preserves pagination', () => {
     const meta = { page: 1, limit: 10, total: 1, totalPages: 1 }
 
-    expect(phrasesMappers.toPhraseList({ data: [phrase], meta })).toEqual({
+    expect(toPhraseList({ data: [phrase], meta })).toEqual({
       data: [{
         id: phrase.id,
         text: phrase.text,
@@ -37,18 +43,18 @@ describe('phrasesMappers', () => {
       meta: { page: 1, limit: 10, total: 0, totalPages: 0 },
     }
 
-    expect(phrasesMappers.toPhraseList(response)).toEqual(response)
+    expect(toPhraseList(response)).toEqual(response)
   })
 
   it('maps pagination query parameters', () => {
-    expect(phrasesMappers.toPhraseListQuery({ page: 2, limit: 10 })).toEqual({
+    expect(toPhraseListQuery({ page: 2, limit: 10 })).toEqual({
       page: 2,
       limit: 10,
     })
   })
 
   it('preserves the original validation text', () => {
-    expect(phrasesMappers.toValidatePhraseRequestDTO({ text: ' Hola mundo ' }))
+    expect(toValidatePhraseRequestDTO({ text: ' Hola mundo ' }))
       .toEqual({ text: ' Hola mundo ' })
   })
 
@@ -74,6 +80,6 @@ describe('phrasesMappers', () => {
       },
     }
 
-    expect(phrasesMappers.toValidatePhraseResponse(response)).toEqual(response)
+    expect(toValidatePhraseResponse(response)).toEqual(response.data)
   })
 })

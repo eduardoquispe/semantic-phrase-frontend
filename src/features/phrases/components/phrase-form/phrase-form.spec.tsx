@@ -4,7 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { CreatePhraseResponse, ValidatePhraseResponse } from "../../interfaces/phrase.interfaces";
+import type { CreatePhraseResponse } from "../../interfaces/phrase.interfaces";
+import type { ValidatePhraseResponse } from "../../interfaces/phrase-validation.interfaces";
 import { phraseService } from "../../services/phrases.service";
 import { PhraseForm } from "./phrase-form.component";
 
@@ -15,15 +16,13 @@ vi.mock("../../services/phrases.service", () => ({
 const validate = vi.mocked(phraseService.validate);
 const save = vi.mocked(phraseService.save);
 const saved: CreatePhraseResponse = {
-  data: { id: "saved-id", text: "Hola mundo", createdAt: "2026-10-22" },
+  id: "saved-id", text: "Hola mundo", createdAt: "2026-10-22",
 };
 const success: ValidatePhraseResponse = {
-  data: {
-    validationId: "validation-id",
-    expiresAt: "2026-10-22T19:15:00Z",
-    requiresConfirmation: false,
-    match: null,
-  },
+  validationId: "validation-id",
+  expiresAt: "2026-10-22T19:15:00Z",
+  requiresConfirmation: false,
+  match: null,
 };
 const phrase = {
   id: "phrase-id",
@@ -105,7 +104,7 @@ describe("PhraseForm", () => {
     await screen.findByText('Frase guardada')
     expect(save).toHaveBeenCalledExactlyOnceWith({
       text: 'Hola mundo',
-      validationId: success.data.validationId,
+      validationId: success.validationId,
     })
 
     await user.type(input, 'Otra frase')
@@ -221,9 +220,7 @@ describe("PhraseForm", () => {
     ],
   ] as const)("shows one warning for a %s match", async (_, match, title) => {
     const user = userEvent.setup();
-    validate.mockResolvedValue({
-      data: { ...success.data, requiresConfirmation: true, match },
-    });
+    validate.mockResolvedValue({ ...success, requiresConfirmation: true, match });
     renderForm();
     await user.type(screen.getByLabelText("Frase en español"), "Hola");
     await user.click(screen.getByRole("button", { name: "Validar" }));
@@ -240,16 +237,14 @@ describe("PhraseForm", () => {
     expect(save).not.toHaveBeenCalled();
     await user.click(screen.getByRole("button", { name: "Guardar de todos modos" }));
     await screen.findByText("Frase guardada");
-    expect(save).toHaveBeenCalledExactlyOnceWith({ text: "Hola", validationId: success.data.validationId, confirmed: true });
+    expect(save).toHaveBeenCalledExactlyOnceWith({ text: "Hola", validationId: success.validationId, confirmed: true });
   });
 
   it("uses the confirmation flag even when a vector candidate exists", async () => {
     const user = userEvent.setup();
     validate.mockResolvedValue({
-      data: {
-        ...success.data,
-        match: { type: PhraseMatchType.VECTOR, phrase, similarityScore: 0.4 },
-      },
+      ...success,
+      match: { type: PhraseMatchType.VECTOR, phrase, similarityScore: 0.4 },
     });
     renderForm();
     await user.type(screen.getByLabelText("Frase en español"), "Hola");
@@ -299,11 +294,9 @@ describe("PhraseForm", () => {
         validate.mockRejectedValueOnce(new Error("Network error"));
       if (outcome === "warning")
         validate.mockResolvedValueOnce({
-          data: {
-            ...success.data,
-            requiresConfirmation: true,
-            match: { type: PhraseMatchType.VECTOR, phrase, similarityScore: 0.91 },
-          },
+          ...success,
+          requiresConfirmation: true,
+          match: { type: PhraseMatchType.VECTOR, phrase, similarityScore: 0.91 },
         });
       renderForm();
       await user.type(screen.getByLabelText("Frase en español"), "Hola");
@@ -363,7 +356,7 @@ describe('PhraseForm saving', () => {
     client.setQueryData(['other'], {})
     await user.click(screen.getByRole('button', { name: 'Guardar' }))
     await screen.findByText('Frase guardada')
-    expect(save).toHaveBeenCalledExactlyOnceWith({ text: 'Hola mundo', validationId: success.data.validationId })
+    expect(save).toHaveBeenCalledExactlyOnceWith({ text: 'Hola mundo', validationId: success.validationId })
     expect(client.getQueryState(['phrases', { page: 1 }])?.isInvalidated).toBe(true)
     expect(client.getQueryState(['phrases', { page: 2 }])?.isInvalidated).toBe(true)
     expect(client.getQueryState(['other'])?.isInvalidated).toBe(false)

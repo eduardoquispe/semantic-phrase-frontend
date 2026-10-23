@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { expect, it } from 'vitest'
-import type { ValidatePhraseResponse } from '../../interfaces/phrase.interfaces'
+import type { ValidatePhraseResponse } from '../../interfaces/phrase-validation.interfaces'
 import { PhraseFormFeedback } from './phrase-form-feedback.component'
 
 const response: ValidatePhraseResponse = {

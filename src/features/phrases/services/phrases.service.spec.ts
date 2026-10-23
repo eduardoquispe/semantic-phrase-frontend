@@ -25,11 +25,9 @@ describe('phraseService', () => {
     vi.mocked(phraseData.save).mockResolvedValue({ data: phrase })
 
     expect(await phraseService.save(request)).toEqual({
-      data: {
-        id: phrase.id,
-        text: phrase.text,
-        createdAt: new Intl.DateTimeFormat().format(new Date(phrase.createdAt)),
-      },
+      id: phrase.id,
+      text: phrase.text,
+      createdAt: new Intl.DateTimeFormat().format(new Date(phrase.createdAt)),
     })
     expect(phraseData.save).toHaveBeenCalledExactlyOnceWith(request)
   })
@@ -66,7 +64,7 @@ describe('phraseService', () => {
     }
     vi.mocked(phraseData.validate).mockResolvedValue(response)
 
-    expect(await phraseService.validate(request)).toEqual(response)
+    expect(await phraseService.validate(request)).toEqual(response.data)
     expect(phraseData.validate).toHaveBeenCalledExactlyOnceWith(request)
   })
 

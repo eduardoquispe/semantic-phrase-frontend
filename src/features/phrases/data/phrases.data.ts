@@ -6,7 +6,7 @@ import type {
   PhraseListQueryDTO,
   ValidatePhraseRequestDTO,
   ValidatePhraseResponseDTO,
-} from "./phrases.dto";
+} from "../dto/phrase.dto";
 
 export const phraseData = {
   save: async (

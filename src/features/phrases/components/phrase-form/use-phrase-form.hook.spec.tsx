@@ -31,13 +31,11 @@ it('starts with empty text and prevents saving without validation', async () => 
 
 it.each([false, true])('validates before saving with confirmation=%s', async requiresConfirmation => {
   vi.mocked(phraseService.validate).mockResolvedValue({
-    data: {
-      validationId: 'validation-id', expiresAt: '2026-10-22T19:15:00Z',
-      requiresConfirmation, match: null,
-    },
+    validationId: 'validation-id', expiresAt: '2026-10-22T19:15:00Z',
+    requiresConfirmation, match: null,
   })
   vi.mocked(phraseService.save).mockResolvedValue({
-    data: { id: 'phrase-id', text: 'Hola mundo', createdAt: '22/10/2026' },
+    id: 'phrase-id', text: 'Hola mundo', createdAt: '22/10/2026',
   })
   const { result } = setup()
 

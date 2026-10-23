@@ -1,30 +1,38 @@
 import { phraseData } from "../data/phrases.data";
-import { phrasesMappers } from "../mappers/phrases.mapper";
+import {
+  toPhraseList,
+  toPhraseListItemData,
+  toPhraseListQuery,
+  toValidatePhraseRequestDTO,
+  toValidatePhraseResponse,
+} from "../mappers/phrases.mapper";
 import type {
   CreatePhraseRequest,
   CreatePhraseResponse,
   PhraseListQuery,
   PhraseListResponse,
+} from "../interfaces/phrase.interfaces";
+import type {
   ValidatePhraseRequest,
   ValidatePhraseResponse,
-} from "../interfaces/phrase.interfaces";
+} from "../interfaces/phrase-validation.interfaces";
 
 export const phraseService = {
   save: async (request: CreatePhraseRequest): Promise<CreatePhraseResponse> => {
-    const response = await phraseData.save(request)
-    return { data: phrasesMappers.toPhraseListItemData(response.data) }
+    const response = await phraseData.save(request);
+    return toPhraseListItemData(response.data);
   },
   list: async (query: PhraseListQuery): Promise<PhraseListResponse> => {
-    const queryDTO = phrasesMappers.toPhraseListQuery(query);
+    const queryDTO = toPhraseListQuery(query);
     const response = await phraseData.list(queryDTO);
-    return phrasesMappers.toPhraseList(response);
+    return toPhraseList(response);
   },
 
   validate: async (
     request: ValidatePhraseRequest,
   ): Promise<ValidatePhraseResponse> => {
-    const requestDTO = phrasesMappers.toValidatePhraseRequestDTO(request);
+    const requestDTO = toValidatePhraseRequestDTO(request);
     const response = await phraseData.validate(requestDTO);
-    return phrasesMappers.toValidatePhraseResponse(response);
+    return toValidatePhraseResponse(response);
   },
 };
