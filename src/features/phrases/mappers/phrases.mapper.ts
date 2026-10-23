@@ -2,12 +2,16 @@ import type {
   PhraseDTO,
   PhraseListQueryDTO,
   PhraseListResponseDTO,
+  ValidatePhraseRequestDTO,
+  ValidatePhraseResponseDTO,
 } from "../data/phrases.dto";
 import type {
   Phrase,
   PhraseListQuery,
   PhraseListResponse,
-} from "../model/phrase.model";
+  ValidatePhraseRequest,
+  ValidatePhraseResponse,
+} from "../interfaces/phrase.interfaces";
 
 export const phrasesMappers = {
   toPhraseListItemData: (phrase: PhraseDTO): Phrase => ({
@@ -23,4 +27,40 @@ export const phrasesMappers = {
     page: query.page,
     limit: query.limit,
   }),
+  toValidatePhraseRequestDTO: (
+    request: ValidatePhraseRequest,
+  ): ValidatePhraseRequestDTO => ({
+    text: request.text,
+  }),
+  toValidatePhraseResponse: (
+    data: ValidatePhraseResponseDTO,
+  ): ValidatePhraseResponse => {
+    const sourceMatch = data.data.match;
+    let match: ValidatePhraseResponse["data"]["match"] = null;
+
+    if (sourceMatch) {
+      const phrase = {
+        id: sourceMatch.phrase.id,
+        text: sourceMatch.phrase.text,
+      };
+
+      match =
+        sourceMatch.type === "vector"
+          ? {
+              type: "vector",
+              phrase,
+              similarityScore: sourceMatch.similarityScore,
+            }
+          : { type: "textual_exact", phrase, similarityScore: null };
+    }
+
+    return {
+      data: {
+        validationId: data.data.validationId,
+        expiresAt: data.data.expiresAt,
+        requiresConfirmation: data.data.requiresConfirmation,
+        match,
+      },
+    };
+  },
 };

@@ -8,8 +8,8 @@ export const phraseFormSchema = z.object({
       "La frase debe estar en una sola línea y no contener tabulaciones.",
     )
     .regex(
-      /^[\p{L}\p{N} ,.-]*$/u,
-      "Usa solo letras, números, espacios normales, comas, puntos y guiones cortos (-).",
+      /^[\p{L}\p{N} ,./$%;-]*$/u,
+      "Usa solo letras, números, espacios normales y estos símbolos: . / $ % , ; -",
     )
     .trim()
     .refine((text) => Array.from(text).length >= 1, "Ingresa una frase.")

@@ -1,4 +1,4 @@
-import type { Phrase } from "../../model/phrase.model";
+import type { Phrase } from "../../interfaces/phrase.interfaces";
 
 export interface PhraseListItemProps {
   phrase: Phrase;

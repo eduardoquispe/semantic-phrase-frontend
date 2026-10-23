@@ -1,4 +1,3 @@
-import { Button } from "../../../../shared/components/ui/button";
 import type { PhraseListItemProps } from "./phrase-list-item.types";
 
 export function PhraseListItem({ phrase }: PhraseListItemProps) {
@@ -9,9 +8,6 @@ export function PhraseListItem({ phrase }: PhraseListItemProps) {
       </p>
       <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs text-caption">{phrase.createdAt}</span>
-        {/* <Button variant="delete" aria-label={`Eliminar: ${phrase.text}`}>
-          Eliminar
-        </Button> */}
       </div>
     </li>
   );

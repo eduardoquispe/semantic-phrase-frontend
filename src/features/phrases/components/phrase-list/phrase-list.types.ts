@@ -1,1 +1,1 @@
-export interface PhraseListProps {}
+export type PhraseListProps = Record<string, never>
