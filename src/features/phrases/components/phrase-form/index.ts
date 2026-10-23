@@ -1,1 +1,1 @@
-export { PhraseForm } from './phrase-form.component'
+export { PhraseForm } from "./phrase-form.component";
