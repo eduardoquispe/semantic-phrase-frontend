@@ -1,12 +1,32 @@
+import { useState } from "react";
 import { PhrasePagination } from "../phrase-pagination";
 import { PhraseListItem } from "../phrase-list-item";
+import { PhraseDeleteModal } from "../phrase-delete-modal";
 import { usePhrasesList } from "../../hooks/phrases-list.hook";
-import { useState } from "react";
+import { useDeletePhrase } from "../../hooks/delete-phrase.hook";
+import type { Phrase } from "../../interfaces/phrase.interfaces";
 
 export function PhraseList() {
   const [page, setPage] = useState(1);
+  const [phrase, setPhrase] = useState<Phrase | null>(null);
   const { data } = usePhrasesList({ page, limit: 20 });
   const { data: phrases = [], meta } = data ?? {};
+
+  const phraseId = phrase?.id ?? "";
+
+  const { isPending, error, confirm, reset } = useDeletePhrase(phraseId, {
+    onDeleted: () => setPhrase(null),
+  });
+
+  const handleDeleteClick = (phrase: Phrase) => {
+    reset();
+    setPhrase(phrase);
+  };
+
+  const handleCancel = () => {
+    reset();
+    setPhrase(null);
+  };
 
   return (
     <section
@@ -32,7 +52,11 @@ export function PhraseList() {
         className="max-h-[360px] divide-y divide-divider overflow-y-auto overscroll-contain focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand"
       >
         {phrases.map((phrase) => (
-          <PhraseListItem key={phrase.id} phrase={phrase} />
+          <PhraseListItem
+            key={phrase.id}
+            phrase={phrase}
+            onDeleteClick={handleDeleteClick}
+          />
         ))}
       </ul>
       <div className="border-t border-divider bg-footer px-5 py-3 sm:px-6">
@@ -45,6 +69,14 @@ export function PhraseList() {
         page={meta?.page || 1}
         totalPages={meta?.totalPages || 1}
         onPageChange={setPage}
+      />
+      <PhraseDeleteModal
+        phrase={phrase}
+        isOpen={!!phrase}
+        isPending={isPending}
+        error={error}
+        onConfirm={confirm}
+        onCancel={handleCancel}
       />
     </section>
   );

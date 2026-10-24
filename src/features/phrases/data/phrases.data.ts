@@ -36,4 +36,7 @@ export const phraseData = {
     );
     return data;
   },
+  remove: async (id: string): Promise<void> => {
+    await httpClient.delete(`/v1/phrases/${id}`);
+  },
 };

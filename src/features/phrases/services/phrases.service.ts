@@ -35,4 +35,5 @@ export const phraseService = {
     const response = await phraseData.validate(requestDTO);
     return toValidatePhraseResponse(response);
   },
+  remove: async (id: string): Promise<void> => phraseData.remove(id),
 };

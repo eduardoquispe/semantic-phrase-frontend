@@ -26,3 +26,19 @@ it("does not handle clicks when disabled", async () => {
   await userEvent.setup().click(button);
   expect(onClick).not.toHaveBeenCalled();
 });
+
+it("shows a spinner and disables itself when loading", async () => {
+  const onClick = vi.fn();
+  const { container } = render(
+    <Button loading onClick={onClick}>
+      Guardar
+    </Button>,
+  );
+
+  const button = screen.getByRole("button", { name: "Guardar" });
+  expect(button).toBeDisabled();
+  expect(button).toHaveAttribute("aria-busy", "true");
+  expect(container.querySelector("svg")).toBeTruthy();
+  await userEvent.setup().click(button);
+  expect(onClick).not.toHaveBeenCalled();
+});
