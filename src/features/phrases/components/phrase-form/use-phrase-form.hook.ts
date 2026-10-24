@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { getFieldErrorMessage } from "../../../../shared/utils/api-error.util";
 import { useSavePhrase } from "../../hooks/save-phrase.hook";
 import { useValidatePhrase } from "../../hooks/validate-phrase.hook";
@@ -24,10 +24,7 @@ export function usePhraseForm() {
   const save = useSavePhrase();
 
   const inFlight = useRef(false);
-  const isValidating = validate.isPending;
-  const isBusy = isSubmitting || isValidating || save.isPending;
-
-  const text = useWatch({ control, name: "text" });
+  const isBusy = isSubmitting || validate.isPending || save.isPending;
 
   const serverFieldError = getFieldErrorMessage(
     validate.error ?? save.error,
@@ -72,11 +69,10 @@ export function usePhraseForm() {
     register,
     handleSubmit,
     errors,
-    text,
+    control,
     validate,
     save,
     isBusy,
-    isValidating,
     serverFieldError,
     onSubmit,
     onSave,

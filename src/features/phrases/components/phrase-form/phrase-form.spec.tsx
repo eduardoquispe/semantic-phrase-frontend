@@ -189,7 +189,7 @@ describe("PhraseForm", () => {
     await user.clear(input);
     await user.type(input, "Hola");
     await user.click(submit);
-    await screen.findByRole("button", { name: "Validando…" });
+    await waitFor(() => expect(submit).toHaveAttribute("aria-busy", "true"));
     expect(submit.disabled).toBe(true);
     expect(input.readOnly).toBe(true);
     expect(input.closest("form")?.getAttribute("aria-busy")).toBe("true");
@@ -274,8 +274,9 @@ describe("PhraseForm", () => {
           finishValidation = resolve;
         }),
     );
-    await user.click(screen.getByRole("button", { name: "Validar" }));
-    await screen.findByRole("button", { name: "Validando…" });
+    const submit = screen.getByRole("button", { name: "Validar" });
+    await user.click(submit);
+    await waitFor(() => expect(submit).toHaveAttribute("aria-busy", "true"));
     expect(screen.queryByRole("alert")).toBeNull();
     await act(async () => {
       finishValidation(success);
@@ -324,8 +325,9 @@ describe("PhraseForm", () => {
           finishValidation = resolve;
         }),
     );
-    await user.click(screen.getByRole("button", { name: "Validar" }));
-    await screen.findByRole("button", { name: "Validando…" });
+    const submit = screen.getByRole("button", { name: "Validar" });
+    await user.click(submit);
+    await waitFor(() => expect(submit).toHaveAttribute("aria-busy", "true"));
     expect(screen.queryByRole("status")).toBeNull();
     await act(async () => {
       finishValidation(success);
@@ -371,9 +373,10 @@ describe('PhraseForm saving', () => {
     let finishSave!: (response: CreatePhraseResponse) => void
     save.mockImplementation(() => new Promise(resolve => { finishSave = resolve }))
     const { user, input } = await validateText()
-    await user.dblClick(screen.getByRole('button', { name: 'Guardar' }))
-    const saving = await screen.findByRole('button', { name: 'Guardando…' }) as HTMLButtonElement
-    expect(saving.disabled).toBe(true)
+    const saveButton = screen.getByRole('button', { name: 'Guardar' }) as HTMLButtonElement
+    await user.dblClick(saveButton)
+    await waitFor(() => expect(saveButton).toHaveAttribute('aria-busy', 'true'))
+    expect(saveButton.disabled).toBe(true)
     expect((screen.getByRole('button', { name: 'Validar' }) as HTMLButtonElement).disabled).toBe(true)
     expect(input.readOnly).toBe(true)
     expect(input.closest('form')?.getAttribute('aria-busy')).toBe('true')
