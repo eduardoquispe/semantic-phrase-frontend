@@ -21,7 +21,7 @@ Formulario:
 
 - Título «Nueva frase» y explicación «La validación revisa frases guardadas; no guarda la nueva frase.».
 - Label «Frase en español» asociado al input de una línea, vacío, autocomplete off y placeholder «Escribe una frase corta».
-- Ayuda «Una línea · De 1 a 280 caracteres · Al menos una palabra», asociada mediante aria-describedby; contador inicial «0 / 280».
+- Ayuda «Una línea · Hasta 280 caracteres · Al menos 3 letras · Sin emojis», asociada mediante aria-describedby; contador inicial «0 / 280».
 - Validar habilitado sin resultados; Guardar con disabled nativo permanente. Botones type button para evitar submit implícito. Sin validación local, contador dinámico ni reglas nuevas de entrada.
 
 Listado:

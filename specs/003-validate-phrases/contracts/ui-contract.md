@@ -6,7 +6,7 @@ Contrato visible del formulario «Nueva frase» en `/`. Fuentes: `src/features/p
 
 | Estado | Mensaje | Campo y acciones |
 | --- | --- | --- |
-| Inicial | Ayuda «Una línea · De 1 a 280 caracteres · Al menos una palabra»; contador 0 / 280. | Vacío; Validar disponible; Guardar deshabilitado. |
+| Inicial | Ayuda «Una línea · Hasta 280 caracteres · Al menos 3 letras · Sin emojis»; contador 0 / 280. | Vacío; Validar disponible; Guardar deshabilitado. |
 | Entrada inválida | Error junto al campo en lugar de ayuda. | No llama a API; foco al campo al enviar. |
 | En curso | «Validando…»; sin resultado/error anterior. | readOnly; ambas acciones deshabilitadas. |
 | Sin confirmación | «Frase validada» / «No se encontró ninguna coincidencia.» | Guardar habilitado; candidata oculta aunque exista. |

@@ -11,7 +11,7 @@ Modelo retrospectivo del frontend. Fuentes: `src/features/phrases/interfaces/phr
 | Longitud | number derivado | `Array.from(text.trim()).length`, puntos de código. |
 | Error de entrada | string o ausente | React Hook Form y Zod, modo onChange. |
 
-El esquema revisa primero saltos de línea, tabulaciones y separadores U+2028/U+2029; después permite únicamente letras Unicode, números Unicode, espacio normal y `. / $ % , ; -`. Luego recorta y exige 1–280 puntos de código y al menos una letra. No normaliza Unicode, mayúsculas ni idioma. Una letra es válida; signos de interrogación y exclamación, emojis y caracteres combinantes que no sean letras/números se rechazan.
+El esquema revisa primero los caracteres de control Unicode (`Cc`: saltos de línea, tabulaciones, etc.). Luego recorta y exige hasta 280 puntos de código, ningún emoji (`\p{Extended_Pictographic}`, indicadores regionales, ZWJ y selector de variación) y al menos 3 letras (`\p{L}`). No hay lista blanca de caracteres: la puntuación (`¿ ? ! : ( ) , . ;`…) es válida. No normaliza Unicode, mayúsculas ni idioma. Es la misma regla que aplican el DTO y `PhraseText` en el backend.
 
 ## Comprobación
 

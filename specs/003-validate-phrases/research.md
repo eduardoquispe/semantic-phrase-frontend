@@ -4,9 +4,9 @@ Investigación retrospectiva al 2026-10-23 mediante inspección local de impleme
 
 ## 1. Reglas locales antes de la comprobación
 
-**Decision**: Mantener React Hook Form con resolver Zod, modo onChange y normalización mediante trim tras revisar caracteres. Longitud por puntos de código, de 1 a 280, con al menos una letra.
+**Decision**: Mantener React Hook Form con resolver Zod, modo onChange y normalización mediante trim tras revisar caracteres. Longitud por puntos de código, hasta 280, con al menos 3 letras y sin emojis.
 
-**Rationale**: `src/features/phrases/components/phrase-form/phrase-form.schema.ts` rechaza controles y caracteres prohibidos antes de recortar; `phrase-form.component.tsx` usa la misma longitud recortada para el contador. No se depende de maxLength HTML ni se detecta idioma. La ayuda habla de palabra, pero la regla acepta una letra.
+**Rationale**: `src/features/phrases/components/phrase-form/phrase-form.schema.ts` rechaza controles antes de recortar y emojis y letras insuficientes después; `phrase-form.component.tsx` usa la misma longitud recortada para el contador. No se depende de maxLength HTML ni se detecta idioma. La ayuda habla de palabra, pero la regla acepta una letra.
 
 **Alternatives considered**: Validar exclusivamente con atributos HTML, recortar antes de inspeccionar controles o ampliar signos admitidos cambiaría el comportamiento documentado; no se adopta en este plan.
 

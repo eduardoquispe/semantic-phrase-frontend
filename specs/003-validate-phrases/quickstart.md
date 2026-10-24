@@ -27,8 +27,8 @@ Usar Network para distinguir peticiones de comprobación, creación y listado. I
 | --- | --- | --- |
 | Inicio / US1 | Abrir formulario. | Texto vacío, 0 / 280, Validar activo, Guardar deshabilitado. |
 | Recorte / US1 | Escribir «  Hola mundo  »; pulsar Validar; repetir con Enter. | Contador 10 / 280; body text «Hola mundo»; una comprobación por envío, ninguna creación ni invalidación del listado por validar. |
-| Reglas / US2 | Probar vacío, espacios, números sin letras, 281 letras; luego una letra y 280 letras. | Entradas inválidas muestran error y no hacen petición; límites válidos permiten comprobar. |
-| Caracteres / US2 | Probar Hola!, Hola?, emoji, tabulación/salto de línea y separadores mediante pegado cuando el navegador los conserve. | Caracteres prohibidos rechazados si llegan al esquema; no confundir el saneamiento nativo del input con validación del esquema. Usar tests para controles que el input elimina. |
+| Reglas / US2 | Probar vacío, espacios, números sin letras, «ab», 281 letras; luego tres letras y 280 letras. | Entradas inválidas muestran error y no hacen petición; límites válidos permiten comprobar. |
+| Caracteres / US2 | Probar «¿Hola?» y «Hola!» (válidos), emoji (rechazado), tabulación/salto de línea y separadores mediante pegado cuando el navegador los conserve. | Emojis y controles rechazados si llegan al esquema; no confundir el saneamiento nativo del input con validación del esquema. Usar tests para controles que el input elimina. |
 | Sin confirmación / US1, US3 | Obtener requiresConfirmation false, también con candidata. | Éxito; Guardar activo; candidata y porcentaje ocultos. |
 | Exacta / US3 | Validar un texto conocido que devuelva textual_exact y confirmación. | Título exacto, frase existente y aviso de no guardado; sin porcentaje. |
 | Semántica / US3 | Validar texto con vector y confirmación. | Título semántico, candidata, porcentaje redondeado y explicación; Guardar de todos modos. |

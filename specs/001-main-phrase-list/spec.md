@@ -150,7 +150,7 @@ Como persona que utiliza una pantalla pequeña o navega con teclado, quiero pode
 
 - AGENTS.md exige nombres de archivo PascalCase y la constitución remite a esas convenciones; la arquitectura aprobada B03-D13 exige kebab-case con sufijos. La gobernanza exige resolver el conflicto explícitamente antes de crear archivos de implementación afectados. Esta especificación no selecciona una convención ni modifica las fuentes.
 - La arquitectura menciona apps/web, mientras el repositorio y el usuario sitúan este frontend en apps/frontend. F001 se documenta en el proyecto actual; no autoriza moverlo.
-- Product Brief/UI calculan el límite de entrada tras recorte y requieren letras; OpenAPI limita el original y permite signos y emojis. La UI textual aprobada se conserva como referencia; la regla ejecutable necesita conciliación antes de implementar validación.
+- La regla de texto se concilió después en una única regla (hasta 280 puntos de código, al menos 3 letras, sin emojis) compartida por formulario, DTO y dominio; véase la especificación de validación.
 - Product Brief/UI indican que validar no persiste el intento y presentan coincidencia textual de 100 %; OpenAPI persiste una validación temporal y devuelve puntaje textual nulo. Son asuntos de integración posteriores, no decisiones funcionales de F001.
 - El producto contempla eliminar, pero OpenAPI no define esa operación. F001 solo presenta la acción visual y no inventa un contrato.
 - El documento de arquitectura declara no haber verificado los archivos de producto/UI/prototipo. Para esta especificación sí se han consultado los archivos existentes; esa nota histórica no invalida su uso como fuentes visuales.

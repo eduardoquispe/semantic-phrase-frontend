@@ -28,7 +28,7 @@ Documentación retrospectiva del flujo existente: entrada validada localmente, c
 
 **Performance Goals**: Sin metas medidas de latencia o concurrencia. Bloqueo local de operaciones simultáneas, sin garantía de idempotencia entre intentos manuales.
 
-**Constraints**: 1–280 puntos de código tras trim, al menos una letra y caracteres permitidos por Zod. Comprobación previa; confirmación definida por API; sin control local de vencimiento ni reintentos automáticos de mutación. Base URL y CORS compatibles con API real.
+**Constraints**: Hasta 280 puntos de código tras trim, al menos 3 letras, sin emojis ni controles (esquema Zod igual al del backend). Comprobación previa; confirmación definida por API; sin control local de vencimiento ni reintentos automáticos de mutación. Base URL y CORS compatibles con API real.
 
 **Scale/Scope**: Un formulario integrado con listado compartido de páginas de 20; tres historias existentes. Sin cambios del backend, algoritmos de similitud, autenticación ni nuevas operaciones.
 

@@ -60,7 +60,7 @@
 
 **Prueba independiente**: Editar una frase validada y restaurarla; guardar debe seguir deshabilitado. Rechazar entradas inválidas sin POST remoto. Simular por separado error de comprobación y creación: conservar texto, mostrar error y permitir una nueva validación; el fallo de creación descarta la comprobación y no invalida el listado. Con cada operación pendiente, intentar editar, repetir clics y pulsar Enter sin iniciar otra operación.
 
-- [x] T017 [P] [US3] Rechazar vacío, falta de letras, más de 280 puntos de código y caracteres no permitidos, incluyendo tabulaciones y saltos de línea antes de trim, en `src/features/phrases/components/phrase-form/phrase-form.schema.ts`.
+- [x] T017 [P] [US3] Rechazar vacío, menos de 3 letras, más de 280 puntos de código, emojis y caracteres de control, incluyendo tabulaciones y saltos de línea antes de trim, en `src/features/phrases/components/phrase-form/phrase-form.schema.ts`.
 - [x] T018 [P] [US3] Extraer `detail` no vacío de errores Axios o usar el mensaje genérico en `src/shared/utils/get-error-message.ts`, con contrato de error en `src/shared/interfaces/problem-details.interface.ts`.
 - [x] T019 [US3] Reiniciar ambas mutaciones al editar y descartar resultados previos al iniciar otra comprobación en `src/features/phrases/components/phrase-form/phrase-form.component.tsx` y `src/features/phrases/components/phrase-form/use-phrase-form.hook.ts`.
 - [x] T020 [US3] Conservar texto ante fallos y descartar siempre la comprobación al finalizar un intento de guardado para exigir validación nueva en `src/features/phrases/components/phrase-form/use-phrase-form.hook.ts`.

@@ -33,14 +33,14 @@ Como persona que escribe una frase, quiero conocer qué regla incumple mi entrad
 
 **Why this priority**: Evita comprobaciones de entradas inválidas y explica cómo continuar.
 
-**Independent Test**: Probar entradas vacías, sin letras, fuera del límite y con caracteres prohibidos; corregirlas y comprobar que solo una entrada válida permite la comprobación externa.
+**Independent Test**: Probar entradas vacías, con menos de 3 letras, fuera del límite y con emojis o controles; corregirlas y comprobar que solo una entrada válida permite la comprobación externa.
 
 **Acceptance Scenarios**:
 
 1. **Given** una entrada vacía o de espacios normales, **When** se intenta validar, **Then** se muestra «Ingresa una frase.» junto al campo y no se solicita una comprobación externa.
-2. **Given** una entrada de 281 caracteres permitidos con al menos una letra, **When** se intenta validar, **Then** se informa el máximo de 280 y no se solicita la comprobación; una letra y una entrada válida de 280 caracteres sí se admiten.
-3. **Given** una entrada formada por números, espacios normales o símbolos permitidos sin letras, **When** se intenta validar, **Then** se informa que debe contener al menos una letra y no se solicita la comprobación.
-4. **Given** una entrada con caracteres prohibidos, **When** se revisa su validez, **Then** se informa el problema y no se solicita la comprobación al enviarla; las reglas completas se definen en Edge Cases.
+2. **Given** una entrada de 281 caracteres con al menos 3 letras, **When** se intenta validar, **Then** se informa el máximo de 280 y no se solicita la comprobación; una entrada de 3 letras y una válida de 280 caracteres sí se admiten.
+3. **Given** una entrada con menos de 3 letras (p. ej. «ab», «123» o «!!!»), **When** se intenta validar, **Then** se informa que debe contener al menos 3 letras y no se solicita la comprobación.
+4. **Given** una entrada con emojis o caracteres de control, **When** se revisa su validez, **Then** se informa el problema y no se solicita la comprobación al enviarla; las reglas completas se definen en Edge Cases.
 5. **Given** un error del campo, **When** se corrige la entrada, **Then** se actualiza su validez mientras se escribe y se recupera la ayuda al quedar válida; al enviar una entrada inválida el foco vuelve al campo y el error queda asociado a él.
 
 ---
@@ -80,8 +80,8 @@ Como persona que edita su frase o encuentra un fallo, quiero conservar lo escrit
 
 ### Edge Cases
 
-- Se admiten de 1 a 280 caracteres tras recortar espacios exteriores, con al menos una letra. El contador usa esa longitud; los espacios interiores se conservan y cuentan. No se exige una palabra de varias letras, aunque la ayuda inicial diga «Al menos una palabra».
-- Se admiten letras, números, espacios normales y los símbolos `. / $ % , ; -`. Se rechazan saltos de línea, tabulaciones, separadores de línea y párrafo, emojis y otros signos, incluidos exclamación e interrogación. La revisión de caracteres precede al recorte: un carácter prohibido en los extremos también se rechaza.
+- Se admiten hasta 280 caracteres tras recortar espacios exteriores, con al menos 3 letras. El contador usa esa longitud; los espacios interiores se conservan y cuentan. No se exige una palabra completa: bastan 3 letras en total.
+- No hay lista blanca de caracteres: se admite la puntuación (`¿ ? ! : ( ) , . ;`…). Se rechazan los caracteres de control (saltos de línea, tabulaciones…) y los emojis. La revisión de controles precede al recorte: un control en los extremos también se rechaza.
 - Las reglas del campo no comprueban automáticamente el idioma: un texto en otro idioma que las cumpla puede validarse.
 - La necesidad de confirmación la determina el resultado recibido. La pantalla no calcula umbrales ni decide por sí misma si una candidata es un duplicado.
 - Una colección sin frases previas y una comprobación sin coincidencias que requieran confirmación comparten el mismo mensaje de éxito; no se presentan como estados distintos.
@@ -117,7 +117,7 @@ Como persona que edita su frase o encuentra un fallo, quiero conservar lo escrit
 ### Measurable Outcomes
 
 - **SC-001**: En los recorridos sin confirmación, con coincidencia exacta y con coincidencia semántica, el 100 % de las validaciones deja la colección sin nuevas frases y presenta el mensaje y la acción posterior definidos en US1 y US3.
-- **SC-002**: El 100 % de las entradas inválidas enumeradas en US2 y Edge Cases se rechaza antes de la comprobación externa; una letra y 280 caracteres válidos se admiten y «  Hola mundo  » se comprueba como «Hola mundo» con contador «10 / 280».
+- **SC-002**: El 100 % de las entradas inválidas enumeradas en US2 y Edge Cases se rechaza antes de la comprobación externa; tres letras y 280 caracteres válidos se admiten y «  Hola mundo  » se comprueba como «Hola mundo» con contador «10 / 280».
 - **SC-003**: En todos los casos de edición de US4.4, guardar permanece deshabilitado hasta una nueva validación exitosa, sin reutilizar el resultado descartado.
 - **SC-004**: En una comprobación mantenida en curso, doble clic y Enter repetido producen un único intento y cero modificaciones del texto. Tras un fallo se conserva el 100 % del texto escrito y se puede reintentar manualmente.
 - **SC-005**: Los resultados exacto y semántico de US3 permiten identificar la frase existente y la necesidad de una decisión posterior sin confundir la advertencia con una confirmación de guardado; el caso semántico de 0,914 muestra 91 % y el exacto ningún porcentaje.

@@ -43,7 +43,7 @@ Abrir URL de Vite y ruta `/`. Adaptar base al servidor real; reiniciar Vite si c
 
 ## Entradas y recuperación
 
-1. Probar vacío, espacios, «123», 281 letras, «Hola!», emoji, tabulación y salto de línea. Esperar error y ningún POST de comprobación. Si el input normaliza un carácter al pegar, comprobar la regla directamente en el esquema con un caso controlado; no interpretar su eliminación como aceptación por Zod. Una letra y 280 letras son válidas; símbolos permitidos con letras y espacios interiores se conservan, extremos se recortan. Véase [modelo](data-model.md).
+1. Probar vacío, espacios, «123», «ab», 281 letras, emoji, tabulación y salto de línea (errores); «¿Hola?» y «Hola!» son válidos. Para las entradas inválidas, esperar error y ningún POST de comprobación. Si el input normaliza un carácter al pegar, comprobar la regla directamente en el esquema con un caso controlado; no interpretar su eliminación como aceptación por Zod. Tres letras y 280 letras son válidas; la puntuación y los espacios interiores se conservan, los extremos se recortan. Véase [modelo](data-model.md).
 2. Provocar fallo controlado solo del POST de comprobación: conserva texto, muestra error y bloquea guardar. Restaurar servicio y Validar: limpia error; nunca guarda automáticamente.
 3. Tras validar, provocar fallo solo del POST de creación manteniendo GET disponible: conserva texto, descarta comprobación, no actualiza por ese fallo ni reintenta automáticamente. Restaurar, validar de nuevo y guardar expresamente.
 4. Si API rechaza una comprobación vencida, inválida, usada, distinta del texto o sin confirmación, observar recuperación general. No esperar bloqueo local por reloj ni tratamiento especial por código.

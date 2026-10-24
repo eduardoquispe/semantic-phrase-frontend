@@ -58,7 +58,7 @@ Como persona que modifica el texto o encuentra un error, quiero conservar mi fra
 **Acceptance Scenarios**:
 
 1. **Given** una frase validada, **When** se modifica el campo, incluso si después se restaura el texto original, **Then** desaparece el resultado anterior y guardar queda deshabilitado hasta validar nuevamente.
-2. **Given** una frase vacía, de más de 280 caracteres, sin letras o con caracteres no permitidos, **When** se intenta validar, **Then** se muestra el error correspondiente en el campo y no se realiza la comprobación externa.
+2. **Given** una frase vacía, de más de 280 caracteres, con menos de 3 letras, con emojis o con caracteres de control, **When** se intenta validar, **Then** se muestra el error correspondiente en el campo y no se realiza la comprobación externa.
 3. **Given** un error al validar, **When** finaliza el intento, **Then** se conserva el texto, se muestra el error y guardar sigue deshabilitado; «Validar» permite un nuevo intento.
 4. **Given** un error al guardar, **When** finaliza el intento, **Then** se conserva el texto escrito, se muestra el error, se descarta la validación previa y ese fallo no provoca una actualización del listado ni un reintento automático de guardado.
 5. **Given** un intento fallido de guardado, **When** la persona vuelve a validar correctamente, **Then** se elimina el error anterior y guardar se habilita según el nuevo resultado, sin guardar automáticamente.
@@ -68,8 +68,8 @@ Como persona que modifica el texto o encuentra un error, quiero conservar mi fra
 ### Edge Cases
 
 - Texto vacío o compuesto solo por espacios: se rechaza. Los espacios iniciales y finales se excluyen del texto validado, del guardado y del contador; los espacios interiores se conservan.
-- Límites: se admiten de 1 a 280 caracteres tras quitar espacios de los extremos, siempre que exista al menos una letra. Una frase de 281 caracteres se rechaza; una única letra es válida.
-- Caracteres: se admiten letras, números, espacios normales y los símbolos `. / $ % , ; -`. Se rechazan tabulaciones, saltos de línea y otros caracteres, incluidos signos de exclamación y emojis.
+- Límites: se admiten hasta 280 caracteres tras quitar espacios de los extremos, siempre que existan al menos 3 letras. Una frase de 281 caracteres se rechaza; una de 2 letras también.
+- Caracteres: no hay lista blanca; se admite la puntuación (incluidos `¿ ? ! :`). Se rechazan tabulaciones, saltos de línea y otros caracteres de control, y los emojis.
 - El formulario se presenta como «Frase en español», pero no comprueba automáticamente el idioma; una frase en otro idioma que cumpla las reglas del campo puede validarse.
 - Enter inicia la validación, incluso si hay un resultado previo; no confirma el guardado.
 - La necesidad de confirmación depende del resultado de la comprobación, no de un umbral calculado por la pantalla ni de la mera presencia de una candidata.
@@ -107,7 +107,7 @@ Como persona que modifica el texto o encuentra un error, quiero conservar mi fra
 ### Measurable Outcomes
 
 - **SC-001**: En los tres recorridos de creación —sin confirmación, coincidencia exacta y coincidencia semántica—, se registra una sola frase por acción de guardado aceptada y ninguna por validar; el 100 % conserva el texto comprobado sin espacios exteriores.
-- **SC-002**: El 100 % de los casos de entrada vacía, solo espacios, sin letras, 281 caracteres y caracteres prohibidos se rechaza antes de la comprobación externa; los casos de una letra y de 280 caracteres permitidos se admiten.
+- **SC-002**: El 100 % de los casos de entrada vacía, solo espacios, con menos de 3 letras, 281 caracteres, emojis y controles se rechaza antes de la comprobación externa; los casos de 3 letras y de 280 caracteres válidos se admiten.
 - **SC-003**: En el 100 % de los escenarios de modificación y fallo de guardado, guardar permanece deshabilitado hasta obtener una nueva validación. En todos los fallos de operación se conserva el texto escrito.
 - **SC-004**: En ambos estados de operación en curso, clics repetidos y Enter no generan operaciones adicionales ni permiten alterar el texto.
 - **SC-005**: En los recorridos exitosos de US1 y US2, la persona recibe una confirmación inequívoca de guardado y un formulario vacío; si la consulta posterior tiene éxito, ve el total actualizado en la misma página del listado.

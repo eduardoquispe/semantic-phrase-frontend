@@ -30,7 +30,7 @@ Flujo existente: `PhraseForm → usePhraseForm → useValidatePhrase → phraseS
 
 **Performance Goals**: Sin objetivo de latencia ni carga medido. Un intento en curso por formulario mediante bloqueo de interfaz y referencia síncrona; no implica idempotencia entre intentos manuales.
 
-**Constraints**: 1–280 puntos de código después de trim, al menos una letra; caracteres limitados por el esquema antes del recorte. Sin reintentos automáticos, umbrales locales, cuenta regresiva ni comprobación local del vencimiento. Integración requiere base URL y CORS compatibles.
+**Constraints**: Hasta 280 puntos de código después de trim, al menos 3 letras, sin emojis ni controles (misma regla que el backend). Sin reintentos automáticos, umbrales locales, cuenta regresiva ni comprobación local del vencimiento. Integración requiere base URL y CORS compatibles.
 
 **Scale/Scope**: Un formulario, cuatro historias y diez requisitos. Creación corresponde a F004 y listado a F002. Sin cambios de backend, autenticación, edición de frases guardadas ni procesamiento masivo.
 

@@ -21,9 +21,9 @@ Los tipos son contratos estáticos; no validan respuestas en runtime. Fuente: sr
 
 ## Reglas de entrada (FR-002, FR-003)
 
-1. Entrada original string, sin CR, LF, tabulación, U+2028 ni U+2029.
-2. Solo letras Unicode (\p{L}), números Unicode (\p{N}), espacio normal y `. / $ % , ; -`.
-3. Tras trim, entre 1 y 280 puntos de código (`Array.from(text).length`) y al menos una letra. Una única letra es válida; no hay detección de idioma ni requisito técnico de varias palabras.
+1. Entrada original string, sin caracteres de control Unicode (`Cc`: CR, LF, tabulación, etc.).
+2. Sin emojis (`\p{Extended_Pictographic}`, indicadores regionales, ZWJ y selector de variación). La puntuación y demás símbolos son válidos; no hay lista blanca.
+3. Tras trim, hasta 280 puntos de código (`Array.from(text).length`) y al menos 3 letras (`\p{L}`). No hay detección de idioma ni requisito técnico de varias palabras.
 4. Espacios interiores conservados. Ambas acciones pasan por el esquema local antes de invocar el servicio.
 
 ## Estados observables

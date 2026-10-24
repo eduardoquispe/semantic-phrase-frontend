@@ -4,7 +4,7 @@ Investigación retrospectiva al 2026-10-23 basada en implementación y pruebas l
 
 ## Entrada y normalización
 
-- **Decision**: Conservar React Hook Form con zodResolver y phraseFormSchema. Comprobar caracteres de la entrada original antes de trim; después, longitud por Array.from y presencia de letra Unicode.
+- **Decision**: Conservar React Hook Form con zodResolver y phraseFormSchema. Comprobar caracteres de control de la entrada original antes de trim; después, longitud por Array.from, ausencia de emojis y al menos 3 letras Unicode.
 - **Rationale**: El esquema entrega valores normalizados a validar y guardar. Contador y esquema cuentan puntos de código. Servicio y mappers conservan el texto recibido sin normalizarlo nuevamente. Tabs y saltos se rechazan incluso en extremos.
 - **Alternatives considered**: Validación solo en servidor, detección del idioma o nuevos límites no corresponden al código actual.
 - **Evidence**: components/phrase-form/phrase-form.schema.ts, use-phrase-form.hook.ts y phrase-form.component.tsx bajo src/features/phrases.
