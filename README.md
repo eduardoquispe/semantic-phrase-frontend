@@ -16,7 +16,7 @@ Frontend de **Semantic Phrase App**: una herramienta colaborativa para gestionar
 ## Requisitos previos
 
 - Node **22.12.0** (versión validada del proyecto)
-- pnpm
+- pnpm (vs. npm/yarn: instalación más rápida y `node_modules` estricto, sin dependencias fantasma; mismo gestor que usa el backend)
 - Backend accesible en la URL que se configure en `.env`
 
 ## Cómo levantar el proyecto
@@ -86,6 +86,8 @@ Para revisar tipos, lint y compilación, ejecuta también `pnpm lint` y `pnpm bu
 ## Lint y estilo de código
 
 ESLint (flat config) con reglas de TypeScript, React Hooks y React Refresh. No hay Prettier configurado; el estilo se mantiene manualmente: 2 espacios de indentación, comillas simples, sin punto y coma, y nombres de archivo en kebab-case con sufijo de responsabilidad (`.page.tsx`, `.component.tsx`, `.hook.ts`, `.service.ts`, etc.). Detalle completo en `AGENTS.md`.
+
+**Limitación conocida:** el backend sí usa Prettier (`pnpm run format`); aquí no, por lo que el formato depende de la disciplina manual descrita arriba. No hay un motivo documentado para la asimetría entre ambas apps.
 
 ## Conexión con el backend
 
