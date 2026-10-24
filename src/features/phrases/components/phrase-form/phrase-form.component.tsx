@@ -1,7 +1,8 @@
+import { useWatch } from "react-hook-form";
 import { Button } from "../../../../shared/components/ui/button";
 import { Input } from "../../../../shared/components/ui/input";
 import { PhraseFormFeedback } from "../phrase-form-feedback";
-import { PHRASE_MAX_LENGTH } from "./phrase-form.constants";
+import { PHRASE_MAX_LENGTH, PHRASE_MIN_LETTERS } from "./phrase-form.constants";
 import { usePhraseForm } from "./use-phrase-form.hook";
 
 export function PhraseForm() {
@@ -9,29 +10,26 @@ export function PhraseForm() {
     register,
     handleSubmit,
     errors,
-    text,
+    control,
     validate,
     save,
-    isValidating,
     isBusy,
     serverFieldError,
     onSubmit,
     onSave,
   } = usePhraseForm();
 
+  const text = useWatch({ control, name: "text" });
   const fieldError = errors.text;
   const hasFieldError = Boolean(fieldError) || Boolean(serverFieldError);
   const charCount = Array.from(text.trim()).length;
   const helpText =
     fieldError?.message ??
     serverFieldError ??
-    `Una línea · De 1 a ${PHRASE_MAX_LENGTH} caracteres · Al menos una palabra`;
-  const submitLabel = isValidating ? "Validando…" : "Validar";
-  const saveLabel = save.isPending
-    ? "Guardando…"
-    : validate.data?.requiresConfirmation
-      ? "Guardar de todos modos"
-      : "Guardar";
+    `Una línea · Hasta ${PHRASE_MAX_LENGTH} caracteres · Al menos ${PHRASE_MIN_LETTERS} letras · Sin emojis`;
+  const saveLabel = validate.data?.requiresConfirmation
+    ? "Guardar de todos modos"
+    : "Guardar";
 
   return (
     <section
@@ -86,24 +84,14 @@ export function PhraseForm() {
           </span>
         </div>
         <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:items-center">
-          <Button type="submit" disabled={isBusy}>
-            {/* Invisible placeholder keeps the button width stable while the label toggles. */}
-            <span className="inline-grid">
-              <span
-                aria-hidden="true"
-                className="invisible col-start-1 row-start-1"
-              >
-                Validando…
-              </span>
-              <span className="col-start-1 row-start-1" aria-live="polite">
-                {submitLabel}
-              </span>
-            </span>
+          <Button type="submit" disabled={isBusy} loading={validate.isPending}>
+            Validar
           </Button>
           <Button
             type="button"
             variant="save"
             disabled={isBusy || !validate.data}
+            loading={save.isPending}
             onClick={(event) => {
               void handleSubmit(onSave)(event);
             }}

@@ -123,7 +123,7 @@ describe("PhraseForm", () => {
     expect(screen.queryByRole("alert")).toBeNull();
 
     const input = screen.getByLabelText('Frase en español')
-    expect(screen.getByText('Una línea · De 1 a 280 caracteres · Al menos una palabra')).toBeTruthy()
+    expect(screen.getByText('Una línea · Hasta 280 caracteres · Al menos 3 letras · Sin emojis')).toBeTruthy()
     fireEvent.submit(input.closest('form')!)
 
     expect((await screen.findByRole("alert")).textContent).toBe(
@@ -136,12 +136,48 @@ describe("PhraseForm", () => {
       screen.getByLabelText("Frase en español"),
     );
     expect(validate).not.toHaveBeenCalled();
-    expect(screen.queryByText('Una línea · De 1 a 280 caracteres · Al menos una palabra')).toBeNull()
+    expect(screen.queryByText('Una línea · Hasta 280 caracteres · Al menos 3 letras · Sin emojis')).toBeNull()
     expect(input.getAttribute('aria-describedby')).toBe(screen.getByRole('alert').id)
     await user.type(input, 'Hola mundo')
     await waitFor(() => expect(screen.queryByRole('alert')).toBeNull())
-    expect(screen.getByText('Una línea · De 1 a 280 caracteres · Al menos una palabra')).toBeTruthy()
+    expect(screen.getByText('Una línea · Hasta 280 caracteres · Al menos 3 letras · Sin emojis')).toBeTruthy()
   });
+
+  it.each([
+    ["ab", "al menos 3 letras"],
+    ["!!!", "al menos 3 letras"],
+    ["123", "al menos 3 letras"],
+    ["Hola 😀", "emojis"],
+    ["a".repeat(281), "máximo 280"],
+  ])("rejects %s with a specific message", async (value, message) => {
+    const user = userEvent.setup();
+    renderForm();
+    const input = screen.getByLabelText("Frase en español");
+
+    await user.click(input);
+    await user.paste(value);
+    fireEvent.submit(input.closest("form")!);
+
+    expect((await screen.findByRole("alert")).textContent).toContain(message);
+    expect(validate).not.toHaveBeenCalled();
+  });
+
+  it.each(["¿Cuándo es mi cita?", "¡Hola, Cusco!", "abc"])(
+    "accepts punctuation and 3+ letters: %s",
+    async (value) => {
+      const user = userEvent.setup();
+      renderForm();
+      const input = screen.getByLabelText("Frase en español");
+
+      await user.click(input);
+      await user.paste(value);
+      fireEvent.submit(input.closest("form")!);
+
+      await waitFor(() =>
+        expect(validate).toHaveBeenCalledExactlyOnceWith({ text: value }),
+      );
+    },
+  );
 
   it("counts trimmed characters, submits with Enter and reports validation without saving", async () => {
     const user = userEvent.setup();
@@ -164,7 +200,7 @@ describe("PhraseForm", () => {
     expect(screen.queryByText("Frase guardada")).toBeNull();
   });
 
-  it("rejects invalid characters, shows loading and blocks clicks, Enter and editing while pending", async () => {
+  it("rejects emojis, shows loading and blocks clicks, Enter and editing while pending", async () => {
     const user = userEvent.setup();
     let finishValidation!: (response: ValidatePhraseResponse) => void;
     validate.mockImplementation(
@@ -179,17 +215,17 @@ describe("PhraseForm", () => {
       name: "Validar",
     }) as HTMLButtonElement;
 
-    await user.type(input, "Hola!");
+    await user.type(input, "Hola 😀");
     await user.click(submit);
     expect((await screen.findByRole("alert")).textContent).toContain(
-      "Usa solo letras",
+      "emojis",
     );
     expect(validate).not.toHaveBeenCalled();
 
     await user.clear(input);
     await user.type(input, "Hola");
     await user.click(submit);
-    await screen.findByRole("button", { name: "Validando…" });
+    await waitFor(() => expect(submit).toHaveAttribute("aria-busy", "true"));
     expect(submit.disabled).toBe(true);
     expect(input.readOnly).toBe(true);
     expect(input.closest("form")?.getAttribute("aria-busy")).toBe("true");
@@ -274,8 +310,9 @@ describe("PhraseForm", () => {
           finishValidation = resolve;
         }),
     );
-    await user.click(screen.getByRole("button", { name: "Validar" }));
-    await screen.findByRole("button", { name: "Validando…" });
+    const submit = screen.getByRole("button", { name: "Validar" });
+    await user.click(submit);
+    await waitFor(() => expect(submit).toHaveAttribute("aria-busy", "true"));
     expect(screen.queryByRole("alert")).toBeNull();
     await act(async () => {
       finishValidation(success);
@@ -324,8 +361,9 @@ describe("PhraseForm", () => {
           finishValidation = resolve;
         }),
     );
-    await user.click(screen.getByRole("button", { name: "Validar" }));
-    await screen.findByRole("button", { name: "Validando…" });
+    const submit = screen.getByRole("button", { name: "Validar" });
+    await user.click(submit);
+    await waitFor(() => expect(submit).toHaveAttribute("aria-busy", "true"));
     expect(screen.queryByRole("status")).toBeNull();
     await act(async () => {
       finishValidation(success);
@@ -371,9 +409,10 @@ describe('PhraseForm saving', () => {
     let finishSave!: (response: CreatePhraseResponse) => void
     save.mockImplementation(() => new Promise(resolve => { finishSave = resolve }))
     const { user, input } = await validateText()
-    await user.dblClick(screen.getByRole('button', { name: 'Guardar' }))
-    const saving = await screen.findByRole('button', { name: 'Guardando…' }) as HTMLButtonElement
-    expect(saving.disabled).toBe(true)
+    const saveButton = screen.getByRole('button', { name: 'Guardar' }) as HTMLButtonElement
+    await user.dblClick(saveButton)
+    await waitFor(() => expect(saveButton).toHaveAttribute('aria-busy', 'true'))
+    expect(saveButton.disabled).toBe(true)
     expect((screen.getByRole('button', { name: 'Validar' }) as HTMLButtonElement).disabled).toBe(true)
     expect(input.readOnly).toBe(true)
     expect(input.closest('form')?.getAttribute('aria-busy')).toBe('true')
